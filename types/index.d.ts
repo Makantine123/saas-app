@@ -1,3 +1,4 @@
+import { subjects } from '../constants/index';
 // type User = {
 //   name: string;
 //   email: string;
@@ -6,15 +7,15 @@
 // };
 
 enum Subject {
-  maths = "maths",
-  language = "language",
-  science = "science",
-  history = "history",
-  coding = "coding",
-  geography = "geography",
-  economics = "economics",
-  finance = "finance",
-  business = "business",
+  maths = 'maths',
+  language = 'language',
+  science = 'science',
+  history = 'history',
+  coding = 'coding',
+  geography = 'geography',
+  economics = 'economics',
+  finance = 'finance',
+  business = 'business',
 }
 
 type Companion = Models.DocumentList<Models.Document> & {
@@ -65,9 +66,8 @@ interface Avatar {
   className?: string;
 }
 
-
 interface SavedMessage {
-  role: "user" | "system" | "assistant";
+  role: 'user' | 'system' | 'assistant';
   content: string;
 }
 
@@ -80,4 +80,14 @@ interface CompanionComponentProps {
   userImage: string;
   voice: string;
   style: string;
+}
+
+interface CompanionCardProps {
+  id: string;
+  name: string;
+  topic: string;
+  subject: string;
+  duration: number;
+  color: string;
+  bookmarked: boolean;
 }
