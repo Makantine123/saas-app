@@ -1,4 +1,4 @@
-import { subjects } from '../constants/index';
+// import { subjects } from '../constants/index';
 // type User = {
 //   name: string;
 //   email: string;
@@ -91,3 +91,12 @@ interface CompanionCardProps {
   color: string;
   bookmarked: boolean;
 }
+
+type CompanionFormValues = {
+  name: string;
+  subject: string;
+  topic: string;
+  voice: string;
+  style: string;
+  duration: number;
+};

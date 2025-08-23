@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -44,7 +43,7 @@ const formSchema = z.object({
   style: z
     .string()
     .min(2, { message: 'Style must be at least 2 characters long.' }),
-  duration: z
+  duration: z.coerce
     .number()
     .min(1, { message: 'Duration must be at least 1 minute.' }),
 });

@@ -2,9 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import NavItems from './NavItems';
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs';
+import { withAuth } from '@workos-inc/authkit-nextjs';
 
-const Navbar = () => {
+const Navbar = async () => {
+  const { user } = await withAuth();
+  console.log(user);
+
   return (
     <nav className="navbar">
       <Link href={'/'}>
@@ -16,14 +19,12 @@ const Navbar = () => {
         className="
           flex items-center gap-8">
         <NavItems />
-        <SignedOut>
-          <SignInButton>
-            <button className="btn-signin">Sign In</button>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+
+        {user ? (
+          <button>Profle</button>
+        ) : (
+          <button className="btn-signin">Sign In</button>
+        )}
       </div>
     </nav>
   );
