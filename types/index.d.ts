@@ -100,3 +100,23 @@ type CompanionFormValues = {
   style: string;
   duration: number;
 };
+
+type User = {
+  id: string;
+  email: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  emailVerified: boolean;
+  profilePictureUrl?: string | null;
+  lastSignInAt?: string | null;
+  externalId?: string | null;
+  metadata: object;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type UserUpdate = {
+  userId: string;
+  firstName: string;
+  lastName: string;
+};

@@ -68,3 +68,104 @@ export const getCompanion = async (id: string) => {
 
   return companion[0];
 };
+
+export const addToSessionHistory = async (companionId: string) => {
+  try {
+    const { user } = await withAuth();
+    const { accessToken } = await withAuth();
+    const supabase = createSupabaseClient(accessToken);
+    const author = user?.id;
+
+    const { data, error } = await supabase.from('session_history').insert({
+      companion_id: companionId,
+      user_id: author,
+    });
+
+    if (error) throw new Error(error.message);
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getRecentSessions = async (limit = 10) => {
+  try {
+    const { accessToken } = await withAuth();
+    const supabase = createSupabaseClient(accessToken);
+
+    const { data, error } = await supabase
+      .from('session_history')
+      .select(`companions:companion_id (*)`)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw new Error(error.message);
+
+    return data.map(({ companions }) => companions);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserSessions = async (limit = 10) => {
+  try {
+    const { user } = await withAuth();
+    const author = user?.id;
+    const { accessToken } = await withAuth();
+    const supabase = createSupabaseClient(accessToken);
+
+    const { data, error } = await supabase
+      .from('session_history')
+      .select(`companions:companion_id (*)`)
+      .eq('user_id', author)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw new Error(error.message);
+
+    return data.map(({ companions }) => companions);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserCompanions = async () => {
+  try {
+    const { user } = await withAuth();
+    const author = user?.id;
+    const { accessToken } = await withAuth();
+    const supabase = createSupabaseClient(accessToken);
+
+    const { data, error } = await supabase
+      .from('companion')
+      .select()
+      .eq('author', author);
+
+    if (error) throw new Error(error.message);
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// export const getBookmarkedCompanions = async () => {
+//   try {
+//     const { user } = await withAuth();
+//     const author = user?.id;
+//     const { accessToken } = await withAuth();
+//     const supabase = createSupabaseClient(accessToken);
+
+//     const { data, error } = await supabase
+//       .from('bookmarks')
+//       .select(`companions:companion_id (*)`) // Notice the (*) to get all the companion data
+//       .eq('user_id', author);
+
+//     if (error) throw new Error(error.message);
+
+//     return data.map(({ companions }) => companions);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 import soundwave from '@/constants/sound.json';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
+import { addToSessionHistory } from '@/lib/actions/companion.actions';
 
 enum CallStatus {
   INACTIVE = 'INACTIVE',
@@ -45,8 +46,17 @@ const CompanionComponent = ({
 
   useEffect(() => {
     const onCallStart = () => setCallStatus(CallStatus.ACTIVE);
-    const onCallEnd = () => setCallStatus(CallStatus.ENDED);
-    const onMessage = () => {};
+    const onCallEnd = () => {
+      setCallStatus(CallStatus.ENDED);
+      addToSessionHistory(companionId);
+    };
+
+    const onMessage = (message: Message) => {
+      if (message.type === 'transcript' && message.transcriptType === 'final') {
+        const newMessage = { role: message.role, content: message.transcript };
+        setMessages((prev) => [newMessage, ...prev]);
+      }
+    };
     const onSpeechStart = () => setIsSpeaking(true);
     const onSpeechEnd = () => setIsSpeaking(false);
     const onCallError = () => setCallStatus(CallStatus.ERROR);
@@ -176,6 +186,29 @@ const CompanionComponent = ({
               : 'Start Session'}
           </button>
         </div>
+      </section>
+
+      <section className="transcript">
+        <div className="transcript-message no-scrollbar">
+          {messages.map((message, index) => {
+            if (message.role === 'assistant') {
+              return (
+                <p key={index} className="max-sm:text-sm">
+                  {name.split(' ')[0].replace('/[.,]/g, ', '')}:{' '}
+                  {message.content}
+                </p>
+              );
+            } else {
+              return (
+                <p key={index} className="text-primary max-sm:text-sm">
+                  {userName}: {message.content}
+                </p>
+              );
+            }
+          })}
+        </div>
+
+        <div className="transcript-fade" />
       </section>
     </section>
   );

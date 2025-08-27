@@ -3,11 +3,12 @@ import Link from 'next/link';
 import React from 'react';
 import NavItems from './NavItems';
 import { getSignInUrl, withAuth } from '@workos-inc/authkit-nextjs';
+import ManageProfile from './ManageProfile';
 
 const Navbar = async () => {
-  const { user } = await withAuth();
   const signInUrl = await getSignInUrl();
-  console.log(user);
+
+  const { user } = await withAuth();
 
   return (
     <nav className="navbar">
@@ -22,7 +23,7 @@ const Navbar = async () => {
         <NavItems />
 
         {user ? (
-          <button>Profle</button>
+          <ManageProfile user={user} />
         ) : (
           <button className="btn-signin">
             <Link href={signInUrl}>Sign In</Link>

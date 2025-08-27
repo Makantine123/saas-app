@@ -59,3 +59,15 @@ export const configureAssistant = (voice: string, style: string) => {
   };
   return vapiAssistant;
 };
+
+export const capitalizeAndCrop = (str: string, maxLength: number) => {
+  if (!str || typeof str !== 'string') {
+    return ''; // Handle invalid input gracefully
+  }
+
+  // Crop the string if it exceeds maxLength, and add an ellipsis
+  const croppedStr = str.length > maxLength ? str.slice(0, maxLength) : str;
+
+  // Capitalize the first letter and concatenate with the rest of the string
+  return croppedStr.charAt(0).toUpperCase() + croppedStr.slice(1);
+};
