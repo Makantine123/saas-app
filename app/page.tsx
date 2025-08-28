@@ -6,7 +6,6 @@ import {
   getRecentSessions,
 } from '@/lib/actions/companion.actions';
 import { getSubjectColor } from '@/lib/utils';
-// import { recentSessions } from '@/constants';
 import React from 'react';
 
 const Page = async () => {

@@ -9,7 +9,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { signOut } from '@workos-inc/authkit-nextjs';
 import Image from 'next/image';
 import ManageUser from './ManageUser';
 import { useState } from 'react';
@@ -51,11 +50,7 @@ const ManageProfile = ({ user }: { user: User }) => {
           </button>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <button
-            onClick={async () => {
-              await signOut();
-            }}
-            className="flex w-full ">
+          <button onClick={async () => {}} className="flex w-full ">
             Logout{' '}
             <DropdownMenuShortcut>
               <Image

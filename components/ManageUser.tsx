@@ -12,12 +12,14 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { updateUser } from '@/lib/actions/workos.actions';
-import { refreshSession } from '@workos-inc/authkit-nextjs';
-import { useAuth } from '@workos-inc/authkit-nextjs/components';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Spinner } from './ui/shadcn-io/spinner';
+import {
+  getKindeServerSession,
+  withAuth,
+  LoginLink,
+} from '@kinde-oss/kinde-auth-nextjs/server';
 
 const ManageUser = ({
   isOpen,
@@ -32,8 +34,6 @@ const ManageUser = ({
   const [lastName, setLastName] = useState(user?.lastName || '');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { refreshAuth } = useAuth();
-
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
@@ -45,9 +45,6 @@ const ManageUser = ({
         lastName: lastName,
       };
 
-      await updateUser(userObject);
-      await refreshSession();
-      await refreshAuth();
     } catch (error) {
       console.log(error);
     } finally {

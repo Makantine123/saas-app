@@ -4,11 +4,17 @@ import React from 'react';
 import NavItems from './NavItems';
 import { getSignInUrl, withAuth } from '@workos-inc/authkit-nextjs';
 import ManageProfile from './ManageProfile';
+import {
+  getKindeServerSession,
+  LoginLink,
+} from '@kinde-oss/kinde-auth-nextjs/server';
 
 const Navbar = async () => {
-  const signInUrl = await getSignInUrl();
+  // const signInUrl = await getSignInUrl();
 
-  const { user } = await withAuth();
+  const { getUser } = getKindeServerSession();
+
+  const user = await getUser();
 
   return (
     <nav className="navbar">
@@ -26,7 +32,8 @@ const Navbar = async () => {
           <ManageProfile user={user} />
         ) : (
           <button className="btn-signin">
-            <Link href={signInUrl}>Sign In</Link>
+            {/* <Link href={signInUrl}>Sign In</Link> */}
+            <LoginLink>Sign In</LoginLink>
           </button>
         )}
       </div>

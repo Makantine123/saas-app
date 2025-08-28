@@ -1,12 +1,16 @@
 'use server';
 
-import { withAuth } from '@workos-inc/authkit-nextjs';
-import { createSupabaseClient } from '../supabase';
+import { createSupabaseClient } from '../supabase/server';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+// import { createSupabaseClient } from '../supabase';
 
 export const createCompanion = async (formData: CreateCompanion) => {
-  const { accessToken, user } = await withAuth();
-  const author = user?.id;
-  const supabase = createSupabaseClient(accessToken);
+  // const { accessToken, user } = await withAuth();
+  // const author = user?.id;
+  // const supabase = createSupabaseClient(accessToken);
+  const { getUser } = getKindeServerSession();
+  const author = (await getUser())?.id;
+  const supabase = await createSupabaseClient();
 
   const { data, error } = await supabase
     .from('companion')
@@ -27,8 +31,8 @@ export const getAllCompanions = async ({
   subject,
   topic,
 }: GetAllCompanions) => {
-  const { accessToken } = await withAuth();
-  const supabase = createSupabaseClient(accessToken);
+  // const { accessToken } = await withAuth();
+  const supabase = await createSupabaseClient();
 
   let query = supabase.from('companion').select();
 
@@ -54,8 +58,7 @@ export const getAllCompanions = async ({
 };
 
 export const getCompanion = async (id: string) => {
-  const { accessToken } = await withAuth();
-  const supabase = createSupabaseClient(accessToken);
+  const supabase = await createSupabaseClient();
 
   const { data: companion, error } = await supabase
     .from('companion')
@@ -71,10 +74,9 @@ export const getCompanion = async (id: string) => {
 
 export const addToSessionHistory = async (companionId: string) => {
   try {
-    const { user } = await withAuth();
-    const { accessToken } = await withAuth();
-    const supabase = createSupabaseClient(accessToken);
-    const author = user?.id;
+    const { getUser } = getKindeServerSession();
+    const author = (await getUser())?.id;
+    const supabase = await createSupabaseClient();
 
     const { data, error } = await supabase.from('session_history').insert({
       companion_id: companionId,
@@ -91,8 +93,7 @@ export const addToSessionHistory = async (companionId: string) => {
 
 export const getRecentSessions = async (limit = 10) => {
   try {
-    const { accessToken } = await withAuth();
-    const supabase = createSupabaseClient(accessToken);
+    const supabase = await createSupabaseClient();
 
     const { data, error } = await supabase
       .from('session_history')
@@ -110,10 +111,9 @@ export const getRecentSessions = async (limit = 10) => {
 
 export const getUserSessions = async (limit = 10) => {
   try {
-    const { user } = await withAuth();
-    const author = user?.id;
-    const { accessToken } = await withAuth();
-    const supabase = createSupabaseClient(accessToken);
+    const { getUser } = getKindeServerSession();
+    const author = (await getUser())?.id;
+    const supabase = await createSupabaseClient();
 
     const { data, error } = await supabase
       .from('session_history')
@@ -132,10 +132,9 @@ export const getUserSessions = async (limit = 10) => {
 
 export const getUserCompanions = async () => {
   try {
-    const { user } = await withAuth();
-    const author = user?.id;
-    const { accessToken } = await withAuth();
-    const supabase = createSupabaseClient(accessToken);
+    const { getUser } = getKindeServerSession();
+    const author = (await getUser())?.id;
+    const supabase = await createSupabaseClient();
 
     const { data, error } = await supabase
       .from('companion')
